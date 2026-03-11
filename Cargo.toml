@@ -1,0 +1,25 @@
+[package]
+name = "optirust"
+version = "0.1.0"
+edition = "2024"
+authors = ["Roberto German Guedes Neto"]
+description = "CLI de alta performance para otimização de imagens PNG em ambientes DevOps"
+
+[dependencies]
+# CLI e Argumentos
+clap = { version = "4.5.60", features = ["derive"] }
+
+# Processamento de Imagem (Motor Core)
+oxipng = "10.1.0"
+
+# Paralelismo e Performance
+rayon = "1.11.0"
+
+# Sistema de Arquivos e Configuração
+walkdir = "2.5.0"
+serde = { version = "1.0.228", features = ["derive"] }
+toml = "1.0.6+spec-1.1.0"
+
+# Interface Visual (Barra de progresso e Cores)
+indicatif = "0.18.4"
+colored = "3.1.1"
