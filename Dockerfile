@@ -20,10 +20,12 @@ LABEL org.opencontainers.image.title="OptiRust"
 LABEL org.opencontainers.image.description="High-performance PNG optimizer CLI"
 
 # Copia apenas o binário estático
-COPY --from=builder /usr/local/bin/optirust ./optirust
+COPY --from=builder /usr/local/bin/optirust /optirust
 
-EXPOSE 8000
-CMD ["./optirust"]
 # No scratch, o path precisa ser absoluto no Entrypoint
-# ENTRYPOINT [ "/optirust" ]
-# CMD [ "--help" ]
+ENTRYPOINT [ "/optirust" ]
+CMD [ "--help" ]
+
+# Expondo a porta 8000 para o teste conforme o guia do Docker Hub
+# EXPOSE 8000
+# CMD ["/optirust"]
