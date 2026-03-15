@@ -23,3 +23,6 @@ toml = "1.0.6+spec-1.1.0"
 # Interface Visual (Barra de progresso e Cores)
 indicatif = "0.18.4"
 colored = "3.1.1"
+
+# Gerenciamento de Arquivos Temporários
+tempfile = "3.27.0"
