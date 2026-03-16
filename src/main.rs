@@ -1,3 +1,4 @@
+mod optimizer;
 mod scanner;
 
 use std::path::PathBuf;
