@@ -1,8 +1,22 @@
+use oxipng::{InFile, Options, OutFile, optimize};
 use std::path::PathBuf;
 
+/// Otimiza uma imagem PNG individual
 pub fn optimize_png(path: &PathBuf) -> Result<(), String> {
-    // TODO: Implementar a compressão
-    Ok(())
+    // Configurações padrão do oxipng (Equivalente ao nível 2)
+    let options = Options::default();
+
+    // Define a entrada e saída (neste caso, sobrescreve o arquivo original)
+    let input = InFile::Path(path.to_path_buf());
+    let output = OutFile::Path {
+        path: Some(path.to_path_buf()),
+        preserve_attrs: false,
+    };
+
+    // Executa a otimização e trata o erro de forma idiomática
+    optimize(&input, &output, &options)
+        .map(|_| ())
+        .map_err(|e| format!("Erro ao otimizar {:?}: {}", path, e))
 }
 
 #[cfg(test)]
@@ -37,7 +51,7 @@ mod tests {
             "Inicial: {} bytes | Final: {} bytes",
             initial_size, final_size
         );
-        assert!(final_size <= initial_size);
+        assert!(final_size < initial_size);
 
         // Limpeza: Remove a imagem de teste
         fs::remove_file(test_path).unwrap();
