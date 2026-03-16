@@ -26,25 +26,37 @@ enum Commands {
 }
 
 fn main() {
-    let path = PathBuf::from("./test_folder");
+    let cli = Cli::parse();
+    let settings = config::load_config();
 
-    println!(
-        "Iniciando busca de arquivos no diretório: {}",
-        path.display()
-    );
-    let start_time = Instant::now();
+    match cli.command {
+        Commands::Run { path } => {
+            println!("Otimizando em nível: {}", settings.level);
 
-    // 1. Scanner (Busca de arquivos)
-    let files = scanner::find_png_files(path);
-    println!("Encontrados {} arquivos.", files.len());
+            println!(
+                "Iniciando busca de arquivos no diretório: {}",
+                path.display()
+            );
+            let start_time = Instant::now();
 
-    // 2. Optimizer + Rayon
-    let results: Vec<_> = files.par_iter().map(optimizer::optimize_png).collect();
+            // 1. Scanner (Busca de arquivos)
+            let files = scanner::find_png_files(path);
+            println!("Encontrados {} arquivos.", files.len());
 
-    // 3. Resumo simples
-    let duration = start_time.elapsed();
-    let success_count = results.iter().filter(|result| result.is_ok()).count();
-    let failed_count = results.len() - success_count;
-    println!("Processamento concluído em: {:.2?}", duration);
-    println!("Sucessos: {} | Falhas: {}", success_count, failed_count);
+            // 2. Optimizer + Rayon
+            let results: Vec<_> = files.par_iter().map(optimizer::optimize_png).collect();
+
+            // 3. Resumo simples
+            let duration = start_time.elapsed();
+            let success_count = results.iter().filter(|result| result.is_ok()).count();
+            let failed_count = results.len() - success_count;
+            println!("Processamento concluído em: {:.2?}", duration);
+            println!("Sucessos: {} | Falhas: {}", success_count, failed_count);
+        }
+
+        Commands::Init => {
+            // TODO: Criar um arquivo de configurações padrão
+            println!("Gerando arquivo de configuração...")
+        }
+    }
 }
