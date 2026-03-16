@@ -55,11 +55,11 @@ fn main() {
         }
 
         Commands::Init => {
+            println!("Gerando arquivo de configuração...");
             match config::create_default_config() {
                 Ok(_) => println!("Arquivo 'optirust.toml criado com sucesso!"),
                 Err(e) => eprintln!("Erro: {}", e),
             }
-            println!("Gerando arquivo de configuração...")
         }
     }
 }
