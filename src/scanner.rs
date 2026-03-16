@@ -10,7 +10,7 @@ pub fn find_png_files(root: PathBuf) -> Vec<PathBuf> {
         .map(|e| e.path().to_path_buf())
         .filter(|path| {
             path.extension()
-                .map_or(false, |ext| ext.eq_ignore_ascii_case("png"))
+                .is_some_and(|ext| ext.eq_ignore_ascii_case("png"))
         })
         .collect() // Transforma o iterador em um Vector
 }
