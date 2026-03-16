@@ -48,4 +48,20 @@ mod tests {
         // Limpeza: Remove a imagem de teste
         fs::remove_file(test_path).unwrap();
     }
+
+    #[test]
+    fn test_file_not_found_error() {
+        // 1. Arquivo inexistente
+        let ghost_path = PathBuf::from("arquivo_fantasma.png");
+
+        // 2. Executar a otimização e verificar o erro
+        let result = optimize_png(&ghost_path);
+
+        // 3. Verificar o erro
+        assert!(result.is_err());
+
+        // 4. Checar a mensagem de erro
+        let error_msg = result.unwrap_err();
+        assert!(error_msg.contains("Erro ao otimizar"));
+    }
 }
