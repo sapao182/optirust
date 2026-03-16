@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-03-11T10:00:00Z",
+  "status": "success",
+  "summary": {
+    "files_processed": 12,
+    "total_original_size_kb": 4500.5,
+    "total_optimized_size_kb": 3200.2,
+    "space_saved_kb": 1300.3,
+    "efficiency_gain_percent": 28.9
+  },
+  "files": [
+    {
+      "name": "hero-banner.png",
+      "path": "./assets/hero-banner.png",
+      "original_kb": 1200.0,
+      "optimized_kb": 850.5,
+      "saved_kb": 349.5,
+      "ratio": "29.1%"
+    }
+  ]
+}
