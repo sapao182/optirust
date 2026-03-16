@@ -2,7 +2,7 @@ use oxipng::{InFile, Options, OutFile, optimize};
 use std::path::PathBuf;
 
 /// Otimiza uma imagem PNG individual
-pub fn optimize_png(path: &PathBuf) -> Result<(), String> {
+pub fn optimize_png(path: &PathBuf) -> Result<(usize, usize), String> {
     // Configurações padrão do oxipng (Equivalente ao nível 2)
     let options = Options::default();
 
@@ -14,9 +14,7 @@ pub fn optimize_png(path: &PathBuf) -> Result<(), String> {
     };
 
     // Executa a otimização e trata o erro de forma idiomática
-    optimize(&input, &output, &options)
-        .map(|_| ())
-        .map_err(|e| format!("Erro ao otimizar {:?}: {}", path, e))
+    optimize(&input, &output, &options).map_err(|e| format!("Erro ao otimizar {:?}: {}", path, e))
 }
 
 #[cfg(test)]
@@ -30,23 +28,17 @@ mod tests {
         let input_path = PathBuf::from("test_input.png");
         let test_path = PathBuf::from("test_output.png");
 
-        // Verifica se a imagem de teste existe antes de começar
+        // 2. Verifica se a imagem de teste existe antes de começar
         if !input_path.exists() {
             panic!("Por favor, adicione a imagem 'test_input.png' na raiz do projeto.");
         }
 
         fs::copy(&input_path, &test_path).unwrap();
 
-        // 2. Medir o tamanho inicial
-        let initial_size = fs::metadata(&test_path).unwrap().len();
+        // 3. Executar a compressão e campturear os tamanhos retornados
+        let (initial_size, final_size) = optimize_png(&test_path).expect("Erro ao otimizar");
 
-        // 3. Executar a compressão
-        optimize_png(&test_path).expect("A compressão falhou");
-
-        // 4. Medir o tamanho final
-        let final_size = fs::metadata(&test_path).unwrap().len();
-
-        // 5. Validar: O tamanho final deve ser menor ou igual ao inicial
+        // 4. Validar: O tamanho final deve ser menor ou igual ao inicial
         println!(
             "Inicial: {} bytes | Final: {} bytes",
             initial_size, final_size
