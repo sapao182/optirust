@@ -1,9 +1,28 @@
 mod optimizer;
 mod scanner;
 
+use clap::{Parser, Subcommand};
 use rayon::prelude::*;
 use std::path::PathBuf;
 use std::time::Instant;
+
+#[derive(Parser)]
+#[command(name = "OptiRust", about = "Optimizador de imagens PNG")]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// Inicia o processo de otimização
+    Run {
+        /// O diretório contendo os PNGs
+        path: PathBuf,
+    },
+    /// Gera um arquivo de configurações padrão
+    Init,
+}
 
 fn main() {
     let path = PathBuf::from("./test_folder");
