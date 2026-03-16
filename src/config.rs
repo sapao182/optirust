@@ -28,6 +28,22 @@ pub fn load_config() -> OptiConfig {
     }
 }
 
+pub fn create_default_config() -> Result<(), String> {
+    let config_path = Path::new("optirust.toml");
+
+    if config_path.exists() {
+        return Err("O arquivo optirust.toml já existe neste diretório.".to_string());
+    }
+
+    let default_config = OptiConfig::default();
+
+    let toml_content = toml::to_string_pretty(&default_config)
+        .map_err(|e| format!("Erro ao gerar TOML: {}", e))?;
+
+    fs::write(config_path, toml_content)
+        .map_err(|e| format!("Erro ao criar o arquivo optirust.toml: {}", e))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -46,5 +62,23 @@ mod tests {
         let config: OptiConfig = toml::from_str(toml_content).unwrap();
         assert_eq!(config.level, 5);
         assert!(!config.overwrite);
+    }
+
+    #[test]
+    fn test_create_default_config() {
+        let test_file = "optirust.toml";
+        // Limpeza inicial
+        let _ = fs::remove_file(test_file);
+
+        let result = create_default_config();
+        assert!(result.is_ok());
+        assert!(Path::new(test_file).exists());
+
+        // Valida o conteúdo (level 2 padrão)
+        let content = fs::read_to_string(test_file).unwrap();
+        assert!(content.contains("level = 2"));
+
+        // Limpeza final
+        fs::remove_file(test_file).unwrap();
     }
 }
