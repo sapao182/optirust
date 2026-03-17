@@ -126,5 +126,5 @@ Você pode usar o OptiRust para otimizar imagens antes do deploy:
 - name: Optimize PNGs
   run: |
     docker run --rm -v ${{ github.workspace }}/assets:/assets \
-    betoxvt/optirust run /assets
+    betoxvt/optirust:latest run /assets
 ```
