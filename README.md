@@ -51,7 +51,7 @@ Inicializar Configuração:
 ```
 
 ### 📊 Exemplo de Relatório (JSON)
-Ao final de cada execução, o sistema gera um optirust_report.json detalhado para auditoria:
+Ao final de cada execução, o sistema gera um `optirust_report.json` detalhado para auditoria:
 
 ```JSON
 {
