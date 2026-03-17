@@ -105,7 +105,7 @@ pub fn print_terminal_summary(report: &FinalReport) {
     println!("{}", separator);
 
     println!(
-        "{:<10} {:<25} {:>12} {:>12} {:>10}",
+        "{:<10} {:<25} {:>11} {:>11} {:>8}",
         "STATUS".bold(),
         "ARQUIVO".bold(),
         "ORIGINAL".bold(),
@@ -134,19 +134,29 @@ pub fn print_terminal_summary(report: &FinalReport) {
     println!("{}", "-".repeat(70));
     println!("\n{} RESUMO DA OPERAÇÃO:", "📊".bold());
     println!(
-        "{} Arquivos processados: {}",
-        "🔹".blue(),
-        report.summary.files_processed
+        "{}",
+        format!(
+            "🔹 Arquivos processados: {}",
+            report.summary.files_processed
+        )
+        .blue()
     );
     println!(
-        "{} Economia total:      {:.1} KB",
-        "  ".blue(),
-        report.summary.space_saved_kb
+        "{}",
+        format!(
+            "🔹 Economia total:      {:.1} KB",
+            report.summary.space_saved_kb.to_string()
+        )
+        .blue()
     );
     println!(
-        "{} Ganho de eficiência: {:.1}%",
-        "✅".green(),
-        report.summary.efficiency_gain_percent
+        "{}",
+        format!(
+            "🔹 Ganho de eficiência: {:.1}%\n",
+            report.summary.efficiency_gain_percent.to_string()
+        )
+        .green()
+        .bold()
     );
 }
 
