@@ -134,18 +134,14 @@ pub fn print_terminal_summary(report: &FinalReport) {
     println!("{}", "-".repeat(70));
     println!("\n{} RESUMO DA OPERAÇÃO:", "📊".bold());
     println!(
-        "{}",
-        format!(
-            "🔹 Arquivos processados: {}",
-            report.summary.files_processed
-        )
-        .blue()
+        "🔹 Arquivos processados: {}",
+        report.summary.files_processed.to_string().blue()
     );
     println!(
         "{}",
         format!(
-            "🔹 Economia total:      {:.1} KB",
-            report.summary.space_saved_kb.to_string()
+            "🔹 Economia total:      {:.2} KB",
+            report.summary.space_saved_kb
         )
         .blue()
     );
@@ -153,7 +149,7 @@ pub fn print_terminal_summary(report: &FinalReport) {
         "{}",
         format!(
             "🔹 Ganho de eficiência: {:.1}%\n",
-            report.summary.efficiency_gain_percent.to_string()
+            report.summary.efficiency_gain_percent
         )
         .green()
         .bold()
