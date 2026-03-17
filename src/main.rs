@@ -35,21 +35,30 @@ fn main() {
     let cli = Cli::parse();
     let settings = config::load_config();
 
+    // Definição de Cores ANSI
+    let green = "\x1b[32m";
+    let blue = "\x1b[34m";
+    let yellow = "\x1b[33m";
+    let reset = "\x1b[0m";
+
     match cli.command {
         Commands::Run { path, summary } => {
-            println!("Otimizando em nível: {}", settings.level);
-            println!("Iniciando OptiRust em: {:?}", path);
+            println!(
+                "🛠️ Otimizando em nível: {}{}{}",
+                green, settings.level, reset
+            );
+            println!("{}🔍 Varrendo diretório: {:?}{}", blue, path, reset);
 
             let start_time = Instant::now();
 
             // 1. Scanner
             let files = scanner::find_png_files(path);
             if files.is_empty() {
-                println!("Nenhum arquivo PNG encontrado.");
+                println!("{}⚠️ Nenhum arquivo PNG encontrado.{}", yellow, reset);
                 return;
             }
 
-            println!("Encontrados {} arquivos.", files.len());
+            println!("{}📦 Encontrados: {} arquivos.{}", blue, files.len(), reset);
 
             let pb = ProgressBar::new(files.len() as u64);
 
@@ -85,17 +94,20 @@ fn main() {
                         report::print_terminal_summary(&full_report);
                     }
                     let duration = start_time.elapsed();
-                    println!("Concluído em {:?}!", duration);
-                    println!("Relatório detalhado gerado em 'optirust_report.json'");
+                    println!("✅ Concluído em {:?}!", duration);
+                    println!("📝 Relatório detalhado gerado em 'optirust_report.json'");
                 }
                 Err(e) => eprintln!("Erro ao gerar relatório: {}", e),
             }
         }
 
         Commands::Init => {
-            println!("Gerando arquivo de configuração...");
+            println!("{}🛠️ Gerando arquivo de configuração...{}", blue, reset);
             match config::create_default_config() {
-                Ok(_) => println!("Arquivo 'optirust.toml criado com sucesso!"),
+                Ok(_) => println!(
+                    "{}[OK]{} Arquivo 'optirust.toml criado com sucesso!",
+                    green, reset
+                ),
                 Err(e) => eprintln!("Erro: {}", e),
             }
         }

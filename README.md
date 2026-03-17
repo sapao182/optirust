@@ -24,6 +24,26 @@ O **OptiRust** é uma ferramenta de linha de comando (CLI) desenvolvida em **Rus
 
 - **Estilização:** `colored` (ANSI terminal colors).
 
+## 🏗️ Arquitetura do Projeto
+
+```
+├── src/
+│   ├── main.rs             # Entrada do programa
+│   ├── config.rs           # Configuração e Persistência
+│   ├── report.rs           # Gerador de Relatórios
+│   ├── scanner.rs          # Rastreador de Arquivos
+│   └── optimizer.rs        # Motor de Compressão
+├── examples/               # Scripts criados durante o desenvolvimento 
+├── assets/                 # Imagens para testar
+├── Cargo.toml              # Configuração do Cargo
+├── Cargo.lock              # Lockfile do Cargo
+├── Dockerfile              # Arquivo Docker
+├── optirust_report.json    # Relatório real
+├── optirust.toml           # Configuração padrão
+├── test_input.png          # Imagem para testes unitários
+└── README.md               # Documentação
+```
+
 ## 📦 Como Instalar e Rodar
 **Pré-requisitos**
 
