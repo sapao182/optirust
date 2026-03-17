@@ -10,8 +10,16 @@ use rayon::prelude::*;
 use std::path::PathBuf;
 use std::time::Instant;
 
+/// 🦀 OptiRust - Otimizador de PNG de alta performance escrito em Rust.
+/// Desenvolvido para processamento em massa com segurança e velocidade.#[derive(Parser)]
 #[derive(Parser)]
-#[command(name = "OptiRust", about = "Optimizador de imagens PNG")]
+#[command(
+    author = "Roberto German Guedes Neto",
+    version = "0.1.2",
+    name = "OptiRust",
+    about,
+    long_about = None
+)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
@@ -19,16 +27,17 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Inicia o processo de otimização
+    /// 🚀 Inicia a otimização dos arquivos no diretório especificado
     Run {
-        /// O diretório contendo os PNGs
+        /// Caminho para o diretório contendo as imagens PNG
+        #[arg(value_name = "DIRETÓRIO")]
         path: PathBuf,
 
-        /// Exibe o resumo visual do relatório no terminal
+        /// Exibe um resumo visual detalhado no terminal ao finalizar
         #[arg(short, long, default_value_t = false)]
         summary: bool,
     },
-    /// Gera um arquivo de configurações padrão
+    /// ⚙️ Inicializa o arquivo de configuração padrão (optirust.toml)
     Init,
 }
 
