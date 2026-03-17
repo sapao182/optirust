@@ -1,5 +1,6 @@
 mod config;
 mod optimizer;
+mod report;
 mod scanner;
 
 use clap::{Parser, Subcommand};
@@ -33,25 +34,43 @@ fn main() {
         Commands::Run { path } => {
             println!("Otimizando em nível: {}", settings.level);
 
-            println!(
-                "Iniciando busca de arquivos no diretório: {}",
-                path.display()
-            );
+            println!("Iniciando OptiRust em: {:?}", path);
             let start_time = Instant::now();
 
             // 1. Scanner (Busca de arquivos)
             let files = scanner::find_png_files(path);
-            println!("Encontrados {} arquivos.", files.len());
+            if files.is_empty() {
+                println!("Nenhum arquivo PNG encontrado.");
+                return;
+            } else {
+                println!("Encontrados {} arquivos.", files.len());
+            }
 
             // 2. Optimizer + Rayon
             let results: Vec<_> = files.par_iter().map(optimizer::optimize_png).collect();
 
-            // 3. Resumo simples
-            let duration = start_time.elapsed();
-            let success_count = results.iter().filter(|result| result.is_ok()).count();
-            let failed_count = results.len() - success_count;
-            println!("Processamento concluído em: {:.2?}", duration);
-            println!("Sucessos: {} | Falhas: {}", success_count, failed_count);
+            // 3. Preparação das métricas para o Relatório
+            let report_data: Vec<(PathBuf, usize, usize)> = files
+                .into_iter()
+                .zip(results.into_iter())
+                .filter_map(|(path, res)| match res {
+                    Ok((orig, optim)) => Some((path, orig, optim)),
+                    Err(e) => {
+                        eprintln!("{}", e);
+                        None
+                    }
+                })
+                .collect();
+
+            // 4. Geração do Relatório
+            match report::generate_json_report(report_data) {
+                Ok(_) => {
+                    let duration = start_time.elapsed();
+                    println!("Concluído em {:?}!", duration);
+                    println!("Relatório detalhado gerado em 'optirust_report.json'");
+                }
+                Err(e) => eprintln!("Erro ao gerar relatório: {}", e),
+            }
         }
 
         Commands::Init => {
