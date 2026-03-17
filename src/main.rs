@@ -21,6 +21,10 @@ enum Commands {
     Run {
         /// O diretório contendo os PNGs
         path: PathBuf,
+
+        /// Exibe o resumo visual do relatório no terminal
+        #[arg(short, long, default_value_t = false)]
+        summary: bool,
     },
     /// Gera um arquivo de configurações padrão
     Init,
@@ -31,7 +35,7 @@ fn main() {
     let settings = config::load_config();
 
     match cli.command {
-        Commands::Run { path } => {
+        Commands::Run { path, summary } => {
             println!("Otimizando em nível: {}", settings.level);
 
             println!("Iniciando OptiRust em: {:?}", path);
@@ -52,7 +56,7 @@ fn main() {
             // 3. Preparação das métricas para o Relatório
             let report_data: Vec<(PathBuf, usize, usize)> = files
                 .into_iter()
-                .zip(results.into_iter())
+                .zip(results)
                 .filter_map(|(path, res)| match res {
                     Ok((orig, optim)) => Some((path, orig, optim)),
                     Err(e) => {
@@ -64,7 +68,10 @@ fn main() {
 
             // 4. Geração do Relatório
             match report::generate_json_report(report_data) {
-                Ok(_) => {
+                Ok(full_report) => {
+                    if summary {
+                        report::print_terminal_summary(&full_report);
+                    }
                     let duration = start_time.elapsed();
                     println!("Concluído em {:?}!", duration);
                     println!("Relatório detalhado gerado em 'optirust_report.json'");

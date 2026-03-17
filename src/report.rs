@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use colored::*;
 use serde::Serialize;
 use std::fs::File;
 use std::io::Write;
@@ -31,7 +32,9 @@ pub struct FinalReport {
     pub files: Vec<FileMetrics>,
 }
 
-pub fn generate_json_report(raw_metrics: Vec<(PathBuf, usize, usize)>) -> Result<(), String> {
+pub fn generate_json_report(
+    raw_metrics: Vec<(PathBuf, usize, usize)>,
+) -> Result<FinalReport, String> {
     let mut files = Vec::new();
     let mut total_orig_bytes = 0;
     let mut total_optim_bytes = 0;
@@ -87,13 +90,68 @@ pub fn generate_json_report(raw_metrics: Vec<(PathBuf, usize, usize)>) -> Result
     let mut file = File::create("optirust_report.json")
         .map_err(|e| format!("Erro ao criar arquivo: {}", e))?;
 
-    file.write_all(json.as_bytes())
-        .map_err(|e| format!("Erro ao gravar arquivo: {}", e))
+    let _ = file
+        .write_all(json.as_bytes())
+        .map_err(|e| format!("Erro ao gravar arquivo: {}", e));
+
+    Ok(report)
+}
+
+pub fn print_terminal_summary(report: &FinalReport) {
+    let separator = "----------------------------------------------------------------------".bold();
+
+    println!("\n{}", separator);
+    println!("{}", "✨ OPTIRUST - RELATÓRIO DE OTIMIZAÇÃO ✨".bold());
+    println!("{}", separator);
+
+    println!(
+        "{:<10} {:<25} {:>12} {:>12} {:>10}",
+        "STATUS".bold(),
+        "ARQUIVO".bold(),
+        "ORIGINAL".bold(),
+        "OTIMIZADO".bold(),
+        "GANHO".bold()
+    );
+    println!("{}", "-".repeat(70));
+
+    for file in &report.files {
+        let status = if file.saved_kb > 0.0 {
+            "[SUCCESS]".green()
+        } else {
+            "[SKIPPED]".yellow()
+        };
+
+        println!(
+            "{:<10} {:<25} {:>8.1} KB {:>8.1} KB {:>10}",
+            status,
+            file.name.chars().take(22).collect::<String>(), // Trunca nomes longos
+            file.original_kb,
+            file.optimized_kb,
+            format!("[ {} ]", file.ratio).green()
+        );
+    }
+
+    println!("{}", "-".repeat(70));
+    println!("\n{} RESUMO DA OPERAÇÃO:", "📊".bold());
+    println!(
+        "{} Arquivos processados: {}",
+        "🔹".blue(),
+        report.summary.files_processed
+    );
+    println!(
+        "{} Economia total:      {:.1} KB",
+        "  ".blue(),
+        report.summary.space_saved_kb
+    );
+    println!(
+        "{} Ganho de eficiência: {:.1}%",
+        "✅".green(),
+        report.summary.efficiency_gain_percent
+    );
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn test_kb_conversion_logic() {
