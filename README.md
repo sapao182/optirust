@@ -1,6 +1,9 @@
 # 🦀 OptiRust: PNG Multi-threaded Optimizer
 O **OptiRust** é uma ferramenta de linha de comando (CLI) desenvolvida em **Rust** focada na otimização em massa de imagens PNG. O projeto foi construído aplicando conceitos avançados de sistemas, como processamento paralelo, serialização rigorosa e desenvolvimento guiado por testes (TDD).
 
+> [!WARNING]
+> Os arquivos otimizados sobreescrevem os originais!
+
 ## 🚀 Diferenciais Técnicos
 - **Processamento Paralelo (Rayon):** Diferente de scripts sequenciais, o OptiRust utiliza um pool de threads para processar múltiplas imagens simultaneamente, escalando a performance de acordo com os núcleos da CPU.
 
