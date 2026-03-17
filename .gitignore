@@ -1,4 +1,4 @@
 /target
-/assets
+/assets*
 optirust.toml
 optirust_report.json
