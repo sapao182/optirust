@@ -4,6 +4,7 @@ mod report;
 mod scanner;
 
 use clap::{Parser, Subcommand};
+use colored::*;
 use indicatif::ProgressBar;
 use rayon::prelude::*;
 use std::path::PathBuf;
@@ -35,30 +36,27 @@ fn main() {
     let cli = Cli::parse();
     let settings = config::load_config();
 
-    // Definição de Cores ANSI
-    let green = "\x1b[32m";
-    let blue = "\x1b[34m";
-    let yellow = "\x1b[33m";
-    let reset = "\x1b[0m";
-
     match cli.command {
         Commands::Run { path, summary } => {
             println!(
-                "🛠️ Otimizando em nível: {}{}{}",
-                green, settings.level, reset
+                "🛠️ Otimizando em nível: {}",
+                settings.level.to_string().green()
             );
-            println!("{}🔍 Varrendo diretório: {:?}{}", blue, path, reset);
+            println!("{}", format!("🔍 Varrendo diretório: {:?}", path).blue());
 
             let start_time = Instant::now();
 
             // 1. Scanner
             let files = scanner::find_png_files(path);
             if files.is_empty() {
-                println!("{}⚠️ Nenhum arquivo PNG encontrado.{}", yellow, reset);
+                println!("{}", "⚠️ Nenhum arquivo PNG encontrado".yellow());
                 return;
             }
 
-            println!("{}📦 Encontrados: {} arquivos.{}", blue, files.len(), reset);
+            println!(
+                "📦 Encontrados: {} arquivos.",
+                files.len().to_string().green()
+            );
 
             let pb = ProgressBar::new(files.len() as u64);
 
@@ -102,12 +100,9 @@ fn main() {
         }
 
         Commands::Init => {
-            println!("{}🛠️ Gerando arquivo de configuração...{}", blue, reset);
+            println!("{}", "🛠️ Gerando arquivo de configuração...{}".blue());
             match config::create_default_config() {
-                Ok(_) => println!(
-                    "{}[OK]{} Arquivo 'optirust.toml criado com sucesso!",
-                    green, reset
-                ),
+                Ok(_) => println!("✅ Arquivo 'optirust.toml criado com sucesso!"),
                 Err(e) => eprintln!("Erro: {}", e),
             }
         }

@@ -107,8 +107,10 @@ O OptiRust está disponível como uma imagem Docker ultra-leve (baseada em scrat
 
 ```Bash
 # Otimizando uma pasta local usando o container
-docker run --rm -v $(pwd)/assets:/data betoxvt/optirust:latest run /data --summary
+docker run --rm -t -v $(pwd)/assets:/data betoxvt/optirust:latest run /data --summary
 ```
+> [!INFO]
+> Use a flag `-t` do `docker run` para ver o relatório colorido!
 
 ### 2. Construindo a imagem localmente
 Utilizamos um processo de Multi-stage build para garantir que a imagem final contenha apenas o binário estático:
