@@ -1,6 +1,6 @@
 [package]
 name = "optirust"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = ["Roberto German Guedes Neto"]
 description = "CLI de alta performance para otimização de imagens PNG em ambientes DevOps"
