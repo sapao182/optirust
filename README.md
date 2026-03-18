@@ -128,3 +128,22 @@ Você pode usar o OptiRust para otimizar imagens antes do deploy:
     docker run --rm -v ${{ github.workspace }}/assets:/assets \
     betoxvt/optirust:latest run /assets
 ```
+## ✅ Funcionalidades Implementadas (v0.1.0)
+
+- [x] **Core Engine em Rust:** Processamento de alta performance utilizando a Edition 2024.
+- [x] **Paralelismo com Rayon:** Otimização multi-thread para processamento em massa de diretórios.
+- [x] **Interface CLI Intuitiva:** Comandos estruturados via `Clap` com suporte a ajuda detalhada (`--help`).
+- [x] **Relatórios Dinâmicos:** Geração automática de `optirust_report.json` e resumo visual colorido no terminal.
+- [x] **Containerização Estática:** Imagem Docker ultra-leve baseada em `scratch` (<3MB), garantindo portabilidade total.
+- [x] **Cálculo de Eficiência:** Métricas precisas de ganho de espaço por arquivo e total da operação.
+
+## 🗺️ Roadmap de Desenvolvimento
+
+Abaixo estão as funcionalidades planejadas para as próximas iterações do OptiRust:
+
+- [ ] **Modo Silent (`--silent`):** Redução de logs para integração limpa em CI/CD.
+- [ ] **Configuração Dinâmica:** Suporte a `--config <path>` e argumentos de linha de comando para sobrescrever o `optirust.toml`.
+- [ ] **Suporte Multi-Formato:** Expansão do algoritmo de compressão para:
+    - [ ] 🖼️ **Imagens:** WebP, JPEG e SVG.
+    - [ ] 📄 **Documentos:** Otimização de camadas de PDF.
+- [ ] **Internacionalização (i18n):** Suporte a logs e relatórios em Inglês e Português.
