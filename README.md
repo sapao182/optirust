@@ -1,6 +1,6 @@
 # 🦀 OptiRust: PNG Multi-threaded Optimizer
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![Version](https://img.shields.io/badge/version-0.1.2-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Docker Size](https://img.shields.io/badge/docker%20image-2.53MB-blueviolet)
 ![Rust](https://img.shields.io/badge/rust-2024-orange?logo=rust)
