@@ -153,3 +153,4 @@ Abaixo estão as funcionalidades planejadas para as próximas iterações do Opt
     - [ ] 🖼️ **Imagens:** WebP, JPEG e SVG.
     - [ ] 📄 **Documentos:** Otimização de camadas de PDF.
 - [ ] **Internacionalização (i18n):** Suporte a logs e relatórios em Inglês e Português.
+- [ ] **Post-Compile Optimization (PCO):** Utilizar flags do Cargo.toml, seção `[profile.release]` para otimizar o binário final.
