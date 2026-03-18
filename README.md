@@ -1,4 +1,10 @@
 # 🦀 OptiRust: PNG Multi-threaded Optimizer
+
+![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Docker Size](https://img.shields.io/badge/docker%20image-2.53MB-blueviolet)
+![Rust](https://img.shields.io/badge/rust-2024-orange?logo=rust)
+
 O **OptiRust** é uma ferramenta de linha de comando (CLI) desenvolvida em **Rust** focada na otimização em massa de imagens PNG. O projeto foi construído aplicando conceitos avançados de sistemas, como processamento paralelo, serialização rigorosa e desenvolvimento guiado por testes (TDD).
 
 > [!WARNING]
