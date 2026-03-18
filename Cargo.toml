@@ -2,7 +2,8 @@
 name = "optirust"
 version = "0.1.2"
 edition = "2024"
-authors = ["Roberto German Guedes Neto"]
+authors = ["Roberto German Guedes Neto <rgermangn@gmail.com>"]
+license = "MIT"
 description = "CLI de alta performance para otimização de imagens PNG em ambientes DevOps"
 
 [dependencies]
