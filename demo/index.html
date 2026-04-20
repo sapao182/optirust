@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optirust Benchmark Lab</title>
+    <style>
+        :root {
+            --rust: #f74c00;
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #e0e0e0;
+            --success: #2ecc71;
+        }
+        body { 
+            font-family: 'Inter', system-ui, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.6;
+            margin: 0; padding: 40px 20px;
+        }
+        .header { text-align: center; max-width: 800px; margin: 0 auto 50px; }
+        h1 { color: var(--rust); font-size: 2.5rem; margin-bottom: 10px; }
+        code { background: #333; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid #333;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-8px); border-color: var(--rust); }
+        .img-container {
+            height: 200px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        
+        .stats { padding: 20px; }
+        .filename { font-weight: 700; color: #888; margin-bottom: 10px; display: block; }
+        .size-compare { display: flex; flex-direction: column; gap: 5px; }
+        .old-size { font-size: 0.85rem; color: #666; text-decoration: line-through; }
+        .new-size { font-size: 1.2rem; font-weight: bold; color: var(--rust); }
+        .saving { 
+            font-size: 0.9rem; 
+            color: var(--success); 
+            background: rgba(46, 204, 113, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Optirust Benchmark</h1>
+    <p>Compare o peso das imagens antes e depois da otimização pelo CI/CD.</p>
+    <p><small>Se você acabou de fazer o fork, estas são as imagens <b>originais</b>. Faça um commit para disparar o Optirust!</small></p>
+</div>
+
+<div class="grid" id="gallery"></div>
+
+<script>
+    const gallery = document.getElementById('gallery');
+    const totalImages = 20;
+
+    for (let i = 0; i < totalImages; i++) {
+        const name = i.toString().padStart(2, '0') + '.png';
+        const path = `assets/${name}`;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="img-container">
+                <img src="${path}" alt="${name}">
+            </div>
+            <div class="stats">
+                <span class="filename">${name}</span>
+                <div class="size-compare" id="compare-${i}">
+                    <span class="new-size">Calculando...</span>
+                </div>
+            </div>
+        `;
+        gallery.appendChild(card);
+
+        updateSize(path, i, name);
+    }
+
+    async function updateSize(path, index, name) {
+        try {
+            const response = await fetch(path);
+            const blob = await response.blob();
+            const currentSizeKB = (blob.size / 1024).toFixed(2);
+            
+            // Lógica de Comparação
+            const storageKey = `optirust-orig-${name}`;
+            let originalSize = localStorage.getItem(storageKey);
+
+            if (!originalSize) {
+                // Primeira vez: salva o tamanho atual como o "original"
+                localStorage.setItem(storageKey, currentSizeKB);
+                originalSize = currentSizeKB;
+            }
+
+            const diff = (originalSize - currentSizeKB).toFixed(2);
+            const percent = originalSize > 0 ? ((diff / originalSize) * 100).toFixed(1) : 0;
+            const container = document.getElementById(`compare-${index}`);
+
+            if (diff > 0.5) { // Só mostra comparação se a economia for relevante (> 0.5KB)
+                container.innerHTML = `
+                    <span class="old-size">Original: ${originalSize} KB</span>
+                    <span class="new-size">Atual: ${currentSizeKB} KB</span>
+                    <span class="saving">↓ ${percent}% de redução</span>
+                `;
+            } else {
+                container.innerHTML = `<span class="new-size">${currentSizeKB} KB</span>`;
+            }
+        } catch (e) {
+            document.getElementById(`compare-${index}`).innerText = "Erro ao carregar";
+        }
+    }
+</script>
+
+</body>
+</html>
