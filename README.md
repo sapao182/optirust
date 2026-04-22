@@ -168,6 +168,46 @@ Este repositório utiliza um pipeline de CI/CD que:
 > [!TIP]
 > Quer testar com suas próprias fotos? Basta subir arquivos .png para a pasta demo/assets e ver o resultado no próximo deploy!
 
+```mermaid
+graph TD
+    %% Estilos de Alto Contraste Coloridos
+    %% Forçamos o texto a ser preto (#000) ou branco (#fff) para contraste.
+    classDef default fill:#fff,stroke:#000,stroke-width:1px,color:#000;
+    classDef user fill:#ff80ab,stroke:#c51162,stroke-width:2px,color:#000,font-weight:bold;
+    classDef git fill:#81d4fa,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef actions fill:#ffe082,stroke:#ff6f00,stroke-width:2px,color:#000;
+    classDef docker fill:#80cbc4,stroke:#004d40,stroke-width:2px,color:#000;
+    classDef pages fill:#81c784,stroke:#1b5e20,stroke-width:2px,color:#000;
+
+    subgraph Ambiente_Usuario [Ambiente do Usuario]
+        U1["Faça o Fork do Repositório"]:::user --> U2["Habilite o GitHub Pages"]:::user
+        U2 --> U3["Realize um Commit na pasta /demo"]:::user
+        U6["Atualize a Página e Compare os Tamanhos"]:::user
+    end
+
+    subgraph GitHub_Infra [Infraestrutura do GitHub]
+        G1["Repositório Forkado (main)"]:::git -->|Gatilho: Push em /demo| A1
+        U3 -->|Push| G1
+        
+        subgraph GActions [GitHub Actions Runner]
+            A1["Inicie o Workflow (demo.yml)"]:::actions --> A2["Execute o optirust (Docker)"]:::actions
+            A2 --> A3["Upload do Artefato (/demo)"]:::actions
+        end
+    end
+
+    subgraph Recursos_Externos [Recursos Externos]
+        D1(("DockerHub: optirust")):::docker -.->|Pull da Imagem| A2
+    end
+
+    subgraph Publicacao [Publicação]
+        A3 -->|Deploy| P1("GitHub Pages Site"):::pages
+        P1 -.->|Visualização| U6
+    end
+
+    %% Relacionamentos
+    U1 -.-> G1
+```
+
 ## ✅ Funcionalidades Implementadas (v0.1.0)
 
 - [x] **Core Engine em Rust:** Processamento de alta performance utilizando a Edition 2024.
