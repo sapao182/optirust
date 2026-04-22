@@ -159,6 +159,19 @@ Agora, vamos ver o Optirust em ação:
 1. Vá na aba Actions e acompanhe o workflow "Optirust Demo Lab". Você verá o Docker esmagando as imagens em tempo real.
 2. Quando terminar, volte à sua página do GitHub Pages e dê F5.
 3. Mágica: A tabela agora mostrará o tamanho "Original" (riscado) e o novo tamanho "Otimizado", calculando a porcentagem exata de economia de espaço.
+
+Os resultados devem ser próximos aos expressos nesta tabela:
+
+| **Categoria**   | **Métrica**                     | **Valor Obtido**       |
+| --------------- | ------------------------------- | ---------------------- |
+| **Compressão**  | Economia Total de Dados         | 2.901,21 KB (~2,83 MB) |
+| **Compressão**  | Ganho Médio de Eficiência       | 12,0%                  |
+| **Compressão**  | Melhor Caso Individual          | 66,0% (Arquivo 15.png) |
+| **Compressão**  | Pior Caso Individual            | 1,7% (Arquivo 04.png)  |
+| **Performance** | Tempo Total do Pipeline (CI/CD) | 26s                    |
+| **Performance** | Tempo de Vida do Contêiner      | 9s                     |
+| **Performance** | Tempo Líquido de Compressão     | 6s                     |
+
 ### 🛠️ Como funciona este teste?
 Este repositório utiliza um pipeline de CI/CD que:
 - **Não altera seu código:** As imagens originais na pasta `demo/assets` continuam pesadas no Git.
@@ -168,6 +181,7 @@ Este repositório utiliza um pipeline de CI/CD que:
 > [!TIP]
 > Quer testar com suas próprias fotos? Basta subir arquivos .png para a pasta demo/assets e ver o resultado no próximo deploy!
 
+**Diagrama do fluxo operacional:**
 ```mermaid
 graph TD
     %% Estilos de Alto Contraste Coloridos
