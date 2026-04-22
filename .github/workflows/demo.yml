@@ -1,0 +1,32 @@
+name: Optirust Demo Lab
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "demo/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Optirust (Optimization Step)
+        run: docker run --rm -v ${{ github.workspace }}/demo/assets:/data betoxvt/optirust:latest run /data --summary
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./demo"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
